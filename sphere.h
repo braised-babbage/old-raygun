@@ -13,26 +13,26 @@ public:
   float radius;
 };
 
-Bool sphere::hit(const ray& ray, float t_min, float t_max, hit_record &rec)
+bool sphere::hit(const ray& ray, float t_min, float t_max, hit_record &rec)
 {
-  vec3 oc = ray.origin() - this->center;
+  vec3 oc = ray.origin() - center;
   float a = dot(ray.direction(), ray.direction());
   float b = 2.0 * dot(oc, ray.direction());
-  float c = dot(oc, oc) - (this->radius)*(this->radius);
+  float c = dot(oc, oc) - (radius)*(radius);
   float discriminant = b*b - 4*a*c;
   if (discriminant >= 0) {
     float t = (-b - sqrt(discriminant) ) / (2.0*a);
     if (t > t_min && t < t_max) {
       rec.t = t;
       rec.p = ray.point_at_parameter(t);
-      rec.normal = rec.p - ray.origin();
+      rec.normal = (rec.p - center)/radius;
       return true;
     }
     t = (-b + sqrt(discriminant) ) / (2.0*a);
     if (t > t_min && t < t_max) {
       rec.t = t;
       rec.p = ray.point_at_parameter(t);
-      rec.normal = rec.p - ray.origin();
+      rec.normal = (rec.p - center)/radius;
       return true;
     }
   }

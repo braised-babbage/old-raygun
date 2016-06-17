@@ -1,5 +1,6 @@
 #ifndef HITABLEH
 #define HITABLEH
+
 #include "vec3.h"
 
 struct hit_record
@@ -11,6 +12,7 @@ struct hit_record
 
 class hitable
 {
+public:
   virtual bool hit(const ray& ray, float t_min, float t_max, hit_record &rec) = 0;
 };
 
