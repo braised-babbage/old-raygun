@@ -1,6 +1,7 @@
 #include <iostream>
 #include <limits>
 #include <cstdlib>
+#include <memory>
 #include "ray.h"
 #include "vec3.h"
 #include "hitable.h"
@@ -13,7 +14,7 @@
 const float FLOAT_MAX = std::numeric_limits<float>::max();
 
 
-vec3 color(const ray& r, hitable *world, int depth = 0) {
+vec3 color(const ray& r, std::shared_ptr<hitable> world, int depth = 0) {
   
   hit_record rec;
   if (world->hit(r, 0.0, FLOAT_MAX, rec)) {
@@ -41,13 +42,16 @@ int main() {
   int rays_per_pixel = 100;
   
   std::cout << "P3\n" << nx << " " << ny << "\n255\n";
-  hitable *list[2];
+  hitable* list[2];
   material *mlist[2];
   mlist[0] = new lambertian(vec3(0.8,0.3,0.3));
   mlist[1] = new lambertian(vec3(0.8,0.8,0.0));
   list[0] = new sphere(vec3(0,0,-1), 0.5, mlist[0]);
   list[1] = new sphere(vec3(0,-100.5,-1), 100, mlist[1]);
-  hitable *world = new hitable_list(list,2);
+  std::shared_ptr<hitable_list> world{new hitable_list()};
+  world->add(std::shared_ptr<hitable>(list[0]));
+  world->add(std::shared_ptr<hitable>(list[1]));
+
   camera cam;
   
   for (int j = ny-1; j >= 0; j--) {
