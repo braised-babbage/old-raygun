@@ -34,6 +34,7 @@ vec3 color(const ray& r, hitable *world, int depth = 0) {
   }
 }
 
+
 int main() {
   int nx = 200;
   int ny = 100;

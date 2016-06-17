@@ -25,4 +25,23 @@ public:
   vec3 albedo;
 };
 
+vec3 reflect(const vec3& v, const vec3& n) {
+  return v - 2*dot(v,n)*n;
+}
+
+class metal : public material {
+public:
+  metal(const vec3& albedo) : albedo(albedo) {}
+
+  virtual bool scatter(const ray& r, const hit_record& rec,
+		       vec3& attenuation, ray& scattered) {
+    vec3 reflected = reflect(r.direction(), rec.normal);
+    scattered = ray(rec.p,reflected);
+    attenuation = albedo;
+    return dot(scattered.direction(),rec.normal) > 0;
+  }
+
+  vec3 albedo;
+};
+
 #endif
