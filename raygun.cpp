@@ -17,7 +17,7 @@ const float FLOAT_MAX = std::numeric_limits<float>::max();
 vec3 color(const ray& r, std::shared_ptr<hitable> world, int depth = 0) {
   
   hit_record rec;
-  if (world->hit(r, 0.0, FLOAT_MAX, rec)) {
+  if (world->hit(r, 0.001, FLOAT_MAX, rec)) {
     ray scattered;
     vec3 attenuation;
     if (depth < 50 && rec.mat->scatter(r, rec, attenuation, scattered)) {
@@ -37,15 +37,25 @@ vec3 color(const ray& r, std::shared_ptr<hitable> world, int depth = 0) {
 
 std::shared_ptr<hitable> make_world()
 {
-  hitable* list[2];
-  material *mlist[2];
-  mlist[0] = new lambertian(vec3(0.8,0.3,0.3));
-  mlist[1] = new lambertian(vec3(0.8,0.8,0.0));
-  list[0] = new sphere(vec3(0,0,-1), 0.5, mlist[0]);
-  list[1] = new sphere(vec3(0,-100.5,-1), 100, mlist[1]);
+  std::shared_ptr<hitable> item;
   std::shared_ptr<hitable_list> world{new hitable_list()};
-  world->add(std::shared_ptr<hitable>(list[0]));
-  world->add(std::shared_ptr<hitable>(list[1]));
+  
+
+  item = std::shared_ptr<hitable>(new sphere(vec3(0,0,-1), 0.5,
+					     new lambertian(vec3(0.8,0.3,0.3))));
+  world->add(item);
+
+  item = std::shared_ptr<hitable>(new sphere(vec3(0,-100.5,-1), 100,
+					     new lambertian(vec3(0.8,0.8,0.0))));
+  world->add(item);
+
+  item = std::shared_ptr<hitable>(new sphere(vec3(1,0,-1), 0.5,
+					     new metal(vec3(0.8,0.6,0.2))));
+  world->add(item);
+
+  item = std::shared_ptr<hitable>(new sphere(vec3(-1,0,-1), 0.5,
+					     new metal(vec3(0.8,0.8,0.8))));
+  world->add(item);
   return world;
 }
 

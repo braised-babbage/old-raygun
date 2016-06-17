@@ -3,6 +3,7 @@
 #include "util.h"
 #include "hitable.h"
 
+
 class material {
 public:
   virtual bool scatter(const ray& r_in, const hit_record& rec,
