@@ -14,25 +14,6 @@ vec3 linear_interpolate(const vec3 &v1, const vec3 &v2, float t) {
   return v1*(1.0-t) + v2*t;
 }
 
-
-vec3 color(const ray& r, hitable *world) {
-  vec3 center(0,0,-1);
-  sphere s(center, 0.5);
-  
-  hit_record rec;
-  if (world->hit(r, 0.0, FLOAT_MAX, rec)) {
-    return 0.5*vec3(rec.normal.x() + 1,
-		    rec.normal.y() + 1,
-		    rec.normal.z() + 1);
-  }
-  else {
-  // background gradient
-    vec3 unit_direction = unit_vector(r.direction());
-    float t = 0.5*(unit_direction.y() + 1.0);
-    return linear_interpolate(vec3(1.0,1.0,1.0), vec3(0.5,0.7,1.0), t);
-  }
-}
-
 // TODO : c++ style rng?
 double rz1() // random zero to one
 {
@@ -45,6 +26,26 @@ vec3 random_in_unit_ball() {
     p = 2.0*vec3(rz1(), rz1(), rz1()) - vec3(1,1,1);
   } while (dot(p,p) >= 1.0);
   return p;
+}
+
+vec3 color(const ray& r, hitable *world) {
+  vec3 center(0,0,-1);
+  sphere s(center, 0.5);
+  
+  hit_record rec;
+  if (world->hit(r, 0.0, FLOAT_MAX, rec)) {
+    vec3 target = rec.p + rec.normal + random_in_unit_ball();
+    return 0.5*color(ray(rec.p, target - rec.p), world);
+ // return 0.5*vec3(rec.normal.x() + 1,
+ // 		    rec.normal.y() + 1,
+ // 		    rec.normal.z() + 1);
+  }
+  else {
+  // background gradient
+    vec3 unit_direction = unit_vector(r.direction());
+    float t = 0.5*(unit_direction.y() + 1.0);
+    return linear_interpolate(vec3(1.0,1.0,1.0), vec3(0.5,0.7,1.0), t);
+  }
 }
 
 int main() {
