@@ -35,13 +35,8 @@ vec3 color(const ray& r, std::shared_ptr<hitable> world, int depth = 0) {
   }
 }
 
-
-int main() {
-  int nx = 200;
-  int ny = 100;
-  int rays_per_pixel = 100;
-  
-  std::cout << "P3\n" << nx << " " << ny << "\n255\n";
+std::shared_ptr<hitable> make_world()
+{
   hitable* list[2];
   material *mlist[2];
   mlist[0] = new lambertian(vec3(0.8,0.3,0.3));
@@ -51,8 +46,18 @@ int main() {
   std::shared_ptr<hitable_list> world{new hitable_list()};
   world->add(std::shared_ptr<hitable>(list[0]));
   world->add(std::shared_ptr<hitable>(list[1]));
+  return world;
+}
+
+int main() {
+  int nx = 200;
+  int ny = 100;
+  int rays_per_pixel = 100;
+  
+  std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 
   camera cam;
+  std::shared_ptr<hitable> world = make_world();
   
   for (int j = ny-1; j >= 0; j--) {
     for (int i = 0; i < nx; i++) {
