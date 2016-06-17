@@ -71,6 +71,9 @@ int main() {
 	col += color(r, world);
       }
       col /= float(rays_per_pixel);
+
+      // gamma 2 correction
+      col = vec3( sqrt(col[0]), sqrt(col[1]), sqrt(col[2]));
       
       int ir = int(255.99*col.r());
       int ig = int(255.99*col.g());
