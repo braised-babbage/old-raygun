@@ -6,7 +6,6 @@
 #include <iostream>
 
 
-
 class vec3 {
  public:
   vec3() {}
@@ -100,5 +99,7 @@ inline vec3 cross(const vec3 &v1, const vec3 &v2) {
 inline vec3 unit_vector(vec3 v) {
   return v / v.length();
 }
+
+
 
 #endif

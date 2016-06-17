@@ -7,38 +7,24 @@
 #include "hitable_list.h"
 #include "sphere.h"
 #include "camera.h"
+#include "material.h"
+#include "util.h"
 
 const float FLOAT_MAX = std::numeric_limits<float>::max();
 
-vec3 linear_interpolate(const vec3 &v1, const vec3 &v2, float t) {
-  return v1*(1.0-t) + v2*t;
-}
 
-// TODO : c++ style rng?
-double rz1() // random zero to one
-{
-    return rand() / (RAND_MAX + 1.);
-}
-
-vec3 random_in_unit_ball() {
-  vec3 p;
-  do {
-    p = 2.0*vec3(rz1(), rz1(), rz1()) - vec3(1,1,1);
-  } while (dot(p,p) >= 1.0);
-  return p;
-}
-
-vec3 color(const ray& r, hitable *world) {
-  vec3 center(0,0,-1);
-  sphere s(center, 0.5);
+vec3 color(const ray& r, hitable *world, int depth = 0) {
   
   hit_record rec;
   if (world->hit(r, 0.0, FLOAT_MAX, rec)) {
-    vec3 target = rec.p + rec.normal + random_in_unit_ball();
-    return 0.5*color(ray(rec.p, target - rec.p), world);
- // return 0.5*vec3(rec.normal.x() + 1,
- // 		    rec.normal.y() + 1,
- // 		    rec.normal.z() + 1);
+    ray scattered;
+    vec3 attenuation;
+    if (depth < 50 && rec.mat->scatter(r, rec, attenuation, scattered)) {
+      return attenuation*color(scattered, world, depth+1);
+    }
+    else {
+      return vec3(0,0,0);
+    }
   }
   else {
   // background gradient
@@ -55,8 +41,11 @@ int main() {
   
   std::cout << "P3\n" << nx << " " << ny << "\n255\n";
   hitable *list[2];
-  list[0] = new sphere(vec3(0,0,-1), 0.5);
-  list[1] = new sphere(vec3(0,-100.5,-1), 100);
+  material *mlist[2];
+  mlist[0] = new lambertian(vec3(0.8,0.3,0.3));
+  mlist[1] = new lambertian(vec3(0.8,0.8,0.0));
+  list[0] = new sphere(vec3(0,0,-1), 0.5, mlist[0]);
+  list[1] = new sphere(vec3(0,-100.5,-1), 100, mlist[1]);
   hitable *world = new hitable_list(list,2);
   camera cam;
   
