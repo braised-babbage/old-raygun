@@ -1,7 +1,10 @@
 #ifndef MATERIALH
 #define MATERIALH
+
+#include <cmath>
 #include "util.h"
 #include "hitable.h"
+
 
 
 class material {
@@ -62,6 +65,17 @@ bool refract(const vec3& v, const vec3& n, float r, vec3& refracted) {
     return false;
 }
 
+
+// Reflectivity varies with angle,
+// this is a simple polynomial approximation
+// TODO : to what?
+// for that (by Christophe Schlick)
+float schlick(float cosine, float ri) {
+  float r0 = (1 - ri) / (1 + ri);
+  r0 = r0*r0;
+  return r0 + (1-r0)*pow((1-cosine),5);
+}
+
 class dialectric : public material {
 public:
   dialectric(float ri) : ri(ri) {}
@@ -72,20 +86,29 @@ public:
     float ratio;
     attenuation = vec3(1.0,1.0,1.0);
     vec3 refracted;
+    float reflect_prob;
+    float cosine;
     if (dot(r_in.direction(), rec.normal) > 0) {
       outward_normal = -rec.normal;
       ratio = ri; // air has RI of 1
+      cosine = ri*dot(r_in.direction(),rec.normal) / r_in.direction().length();
     }
     else {
       outward_normal = rec.normal;
       ratio = 1.0 / ri; // air has RI of 1
+      cosine = -dot(r_in.direction(), rec.normal) / r_in.direction().length();
     }
     if (refract(r_in.direction(), outward_normal, ratio, refracted)) {
-      scattered = ray(rec.p, refracted);
+      reflect_prob = schlick(cosine, ri);
     }
     else {
+      reflect_prob = 1.0;
+    }
+    if (rz1() < reflect_prob) {
       scattered = ray(rec.p, reflected);
-      return false;
+    }
+    else {
+      scattered = ray(rec.p, refracted);
     }
     return true;
   }

@@ -53,9 +53,14 @@ std::shared_ptr<hitable> make_world()
 					     new metal(vec3(0.8,0.6,0.2),0.3)));
   world->add(item);
 
+  //bubble
   item = std::shared_ptr<hitable>(new sphere(vec3(-1,0,-1), 0.5,
 					     new dialectric(1.5)));
   world->add(item);
+  item = std::shared_ptr<hitable>(new sphere(vec3(-1,0,-1), -0.45,
+					     new dialectric(1.5)));
+  world->add(item);
+  
   return world;
 }
 
