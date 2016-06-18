@@ -35,6 +35,60 @@ vec3 color(const ray& r, std::shared_ptr<hitable> world, int depth = 0) {
   }
 }
 
+std::shared_ptr<hitable> random_scene(unsigned n = 3) {
+  std::shared_ptr<hitable> item;
+  std::shared_ptr<hitable_list> world{new hitable_list()};
+
+  // ground
+  item = std::shared_ptr<hitable>(new sphere(vec3(0,-1000,0), 1000,
+					     new lambertian(vec3(0.5, 0.5, 0.5))));
+
+  for (int a = -n; a < n; a++) {
+    for (int b = -n; b < n; b++) {
+      material* mat;
+      float choose_mat = rz1();
+      vec3 center(a+0.9*rz1(), 0.2, b + 0.9*rz1());
+      // minimal distance
+      if ((center - vec3(4, 0.2, 0)).length() > 0.9) {
+	if (choose_mat < 0.8) { // diffuse
+	  mat = new lambertian(vec3(rz1()*rz1(),
+				    rz1()*rz1(),
+				    rz1()*rz1()));
+	}
+	else if (choose_mat < 0.95) { // metal
+	  mat = new metal(vec3(0.5*(1 + rz1()),
+			       0.5*(1 + rz1()),
+			       0.5*(1 + rz1())),
+			  0.5*rz1());
+	}
+	else { // glass
+	  mat = new dialectric(1.5);
+	}
+	item = std::shared_ptr<hitable>(new sphere(center, 0.2, mat));
+	world->add(item);
+      }
+    }
+  }
+
+
+  item = std::shared_ptr<hitable>(new sphere(vec3(0, 1, 0),
+					     1.0,
+					     new dialectric(1.5)));
+  world->add(item);
+
+  item = std::shared_ptr<hitable>(new sphere(vec3(-4, 1, 0),
+					     1.0,
+					     new lambertian(vec3(0.4, 0.2, 0.1))));
+  world->add(item);
+
+  item = std::shared_ptr<hitable>(new sphere(vec3(4,1,0),
+					     1.0,
+					     new metal(vec3(0.7, 0.6, 0.5), 0.0)));
+  world->add(item);
+
+  return world;
+}
+
 std::shared_ptr<hitable> make_world()
 {
   std::shared_ptr<hitable> item;
