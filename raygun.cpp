@@ -89,6 +89,23 @@ std::shared_ptr<hitable> random_scene(unsigned n = 3) {
   return world;
 }
 
+std::shared_ptr<hitable> camera_test_world()
+{
+  std::shared_ptr<hitable> item;
+  std::shared_ptr<hitable_list> world(new hitable_list());
+
+  float R = cos(M_PI/4.0);
+  item = std::shared_ptr<hitable>(new sphere(vec3(-R, 0, -1), R,
+					     new lambertian(vec3(0, 0, 1))));
+  world->add(item);
+
+  item = std::shared_ptr<hitable>(new sphere(vec3(R, 0, -1), R,
+					     new lambertian(vec3(1,0,0))));
+  world->add(item);
+
+  return world;
+}
+
 std::shared_ptr<hitable> make_world()
 {
   std::shared_ptr<hitable> item;
@@ -125,7 +142,8 @@ int main() {
   
   std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 
-  camera cam;
+  camera cam(vec3(-2,2,1), vec3(0,0,-1), vec3(0,1,0),
+	     30, float(nx) / float(ny));
   std::shared_ptr<hitable> world = make_world();
   
   for (int j = ny-1; j >= 0; j--) {
