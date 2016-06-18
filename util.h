@@ -22,4 +22,13 @@ vec3 random_in_unit_ball() {
   return p;
 }
 
+vec3 random_in_unit_disk() {
+  // random vector in the disc z = 0, x^2 + y^2 <= 1
+  vec3 p;
+  do {
+    p = 2.0*vec3(rz1(), rz1(), 0) - vec3(1,1,0);
+  } while (dot(p,p) >= 1.0);
+  return p;
+}
+
 #endif

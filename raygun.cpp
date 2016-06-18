@@ -142,8 +142,13 @@ int main() {
   
   std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 
-  camera cam(vec3(-2,2,1), vec3(0,0,-1), vec3(0,1,0),
-	     30, float(nx) / float(ny));
+  vec3 lookfrom(3,3,2);
+  vec3 lookat(0,0,-1);
+  float dist_to_focus = (lookfrom-lookat).length();
+  float aperture = 2.0;
+  
+  camera cam(lookfrom, lookat, vec3(0,1,0), 20, float(nx)/float(ny),
+	     aperture, dist_to_focus);
   std::shared_ptr<hitable> world = make_world();
   
   for (int j = ny-1; j >= 0; j--) {
