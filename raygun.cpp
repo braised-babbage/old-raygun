@@ -35,21 +35,22 @@ vec3 color(const ray& r, std::shared_ptr<hitable> world, int depth = 0) {
   }
 }
 
-std::shared_ptr<hitable> random_scene(unsigned n = 3) {
+std::shared_ptr<hitable> random_world(int n = 3) {
   std::shared_ptr<hitable> item;
   std::shared_ptr<hitable_list> world{new hitable_list()};
 
   // ground
   item = std::shared_ptr<hitable>(new sphere(vec3(0,-1000,0), 1000,
 					     new lambertian(vec3(0.5, 0.5, 0.5))));
-
+  world->add(item);
+  
   for (int a = -n; a < n; a++) {
     for (int b = -n; b < n; b++) {
       material* mat;
       float choose_mat = rz1();
       vec3 center(a+0.9*rz1(), 0.2, b + 0.9*rz1());
       // minimal distance
-      if ((center - vec3(4, 0.2, 0)).length() > 0.9) {
+      //      if ((center - vec3(4, 0.2, 0)).length() > 0.9) {
 	if (choose_mat < 0.8) { // diffuse
 	  mat = new lambertian(vec3(rz1()*rz1(),
 				    rz1()*rz1(),
@@ -66,7 +67,7 @@ std::shared_ptr<hitable> random_scene(unsigned n = 3) {
 	}
 	item = std::shared_ptr<hitable>(new sphere(center, 0.2, mat));
 	world->add(item);
-      }
+	//      }
     }
   }
 
@@ -136,20 +137,21 @@ std::shared_ptr<hitable> make_world()
 }
 
 int main() {
-  int nx = 200;
-  int ny = 100;
+  int nx = 800;
+  int ny = 400;
   int rays_per_pixel = 100;
   
   std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 
-  vec3 lookfrom(3,3,2);
-  vec3 lookat(0,0,-1);
+  float s = 1.4;
+  vec3 lookfrom(12/s,2.5/s,3.5/s);
+  vec3 lookat(2,0.5,0.2);
   float dist_to_focus = (lookfrom-lookat).length();
-  float aperture = 2.0;
+  float aperture = 0.05;
   
-  camera cam(lookfrom, lookat, vec3(0,1,0), 20, float(nx)/float(ny),
+  camera cam(lookfrom, lookat, vec3(0,1,0),30, float(nx)/float(ny),
 	     aperture, dist_to_focus);
-  std::shared_ptr<hitable> world = make_world();
+  std::shared_ptr<hitable> world = random_world(11);
   
   for (int j = ny-1; j >= 0; j--) {
     for (int i = 0; i < nx; i++) {
