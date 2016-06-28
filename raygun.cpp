@@ -1,7 +1,7 @@
 #include <iostream>
-#include <limits>
 #include <cstdlib>
 #include <memory>
+#include "scene.h"
 #include "ray.h"
 #include "vec3.h"
 #include "hitable.h"
@@ -11,29 +11,7 @@
 #include "material.h"
 #include "util.h"
 
-const float FLOAT_MAX = std::numeric_limits<float>::max();
 
-
-vec3 color(const ray& r, std::shared_ptr<hitable> world, int depth = 0) {
-  
-  hit_record rec;
-  if (world->hit(r, 0.001, FLOAT_MAX, rec)) {
-    ray scattered;
-    vec3 attenuation;
-    if (depth < 50 && rec.mat->scatter(r, rec, attenuation, scattered)) {
-      return attenuation*color(scattered, world, depth+1);
-    }
-    else {
-      return vec3(0,0,0);
-    }
-  }
-  else {
-  // background gradient
-    vec3 unit_direction = unit_vector(r.direction());
-    float t = 0.5*(unit_direction.y() + 1.0);
-    return linear_interpolate(vec3(1.0,1.0,1.0), vec3(0.5,0.7,1.0), t);
-  }
-}
 
 std::shared_ptr<hitable> random_world(int n = 3) {
   std::shared_ptr<hitable> item;
@@ -136,6 +114,8 @@ std::shared_ptr<hitable> make_world()
   return world;
 }
 
+
+
 int main() {
   int nx = 800;
   int ny = 400;
@@ -149,31 +129,11 @@ int main() {
   float dist_to_focus = (lookfrom-lookat).length();
   float aperture = 0.05;
   
-  camera cam(lookfrom, lookat, vec3(0,1,0),30, float(nx)/float(ny),
-	     aperture, dist_to_focus);
+  std::shared_ptr<camera> cam{new camera(lookfrom, lookat, vec3(0,1,0),30,
+					 float(nx)/float(ny), aperture, dist_to_focus)};
   std::shared_ptr<hitable> world = random_world(11);
-  
-  for (int j = ny-1; j >= 0; j--) {
-    for (int i = 0; i < nx; i++) {
-      vec3 col(0,0,0);
-      for (int s = 0; s < rays_per_pixel; s++) {
-	// lower left corner + random offsets
-	float u = (float(i) + rz1()) / float(nx);
-	float v = (float(j) + rz1()) / float(ny);
-	ray r = cam.get_ray(u, v);
-	col += color(r, world);
-      }
-      col /= float(rays_per_pixel);
+  scene rand_scene(world, cam);
 
-      // gamma 2 correction
-      col = vec3( sqrt(col[0]), sqrt(col[1]), sqrt(col[2]));
-      
-      int ir = int(255.99*col.r());
-      int ig = int(255.99*col.g());
-      int ib = int(255.99*col.b());
-      
-      std::cout << ir << " " << ig << " " << ib << "\n";
-    }
-  }
+  rand_scene.render(nx,ny,rays_per_pixel,std::cout);
 }
       
