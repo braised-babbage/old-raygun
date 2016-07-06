@@ -13,7 +13,8 @@ public:
   hitable_list() {}
   // hitable_list(hitable **l, int n) {list = l; list_size = n; }
   virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec);
-
+  virtual bool bounding_box(float t0, float t1, aabb& box) const;
+  
   void add(std::shared_ptr<hitable> item)
   {
     list.push_back(item);
@@ -36,6 +37,11 @@ bool hitable_list::hit(const ray& r, float t_min, float t_max, hit_record& rec) 
     }
   }
   return hit_anything;
+}
+
+bool hitable_list::bounding_box(float t0, float t1, aabb& box) const
+{
+  return false; // TODO: implement this
 }
 
 

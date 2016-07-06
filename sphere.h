@@ -3,6 +3,7 @@
 #include "vec3.h"
 #include "hitable.h"
 #include "material.h"
+#include "aabb.h"
 
 class sphere : public hitable {
 public:
@@ -12,6 +13,8 @@ public:
 
   virtual bool hit(const ray& ray, float t_min, float t_max, hit_record &rec);
 
+  virtual bool bounding_box(float t0, float t1, aabb& box) const;
+  
   vec3 center;
   float radius;
   material* mat;
@@ -43,6 +46,13 @@ bool sphere::hit(const ray& ray, float t_min, float t_max, hit_record &rec)
     }
   }
   return false;
+}
+
+bool sphere::bounding_box(float t0, float t1, aabb& box) const
+{
+  box = aabb(center - vec3(radius, radius, radius),
+	     center + vec3(radius, radius, radius));
+  return true;
 }
 
 #endif
