@@ -117,11 +117,9 @@ std::shared_ptr<hitable> make_world()
 
 
 int main() {
-  int nx = 800;
-  int ny = 400;
-  int rays_per_pixel = 100;
-  
-  std::cout << "P3\n" << nx << " " << ny << "\n255\n";
+  int nx = 200;
+  int ny = 100;
+  int rays_per_pixel = 20;
 
   float s = 1.4;
   vec3 lookfrom(12/s,2.5/s,3.5/s);
