@@ -11,7 +11,7 @@ public:
   vec3 min() const { return _min; }
   vec3 max() const { return _max; }
 
-  inline bool hit(const ray& r) const;
+  inline bool hit(const ray& r, float tmin, float tmax) const;
   
 private:
   vec3 _min;
