@@ -35,5 +35,7 @@ inline bool aabb::hit(const ray& r, float tmin, float tmax) const {
   return true;
 }
 
+aabb surrounding_box(aabb box0, aabb box1);
+
 
 #endif

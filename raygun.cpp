@@ -35,17 +35,20 @@ std::shared_ptr<hitable> random_world(int n = 3) {
 	  mat = new lambertian(vec3(rz1()*rz1(),
 				    rz1()*rz1(),
 				    rz1()*rz1()));
+	  item = std::shared_ptr<hitable>(new moving_sphere(center, center+vec3(0, 0.5*rz1(), 0),
+							    0.0, 1.0, 0.2, mat));
 	}
 	else if (choose_mat < 0.95) { // metal
 	  mat = new metal(vec3(0.5*(1 + rz1()),
 			       0.5*(1 + rz1()),
 			       0.5*(1 + rz1())),
 			  0.5*rz1());
+	  item = std::shared_ptr<hitable>(new sphere(center, 0.2, mat));
 	}
 	else { // glass
 	  mat = new dialectric(1.5);
+	  item = std::shared_ptr<hitable>(new sphere(center, 0.2, mat));
 	}
-	item = std::shared_ptr<hitable>(new sphere(center, 0.2, mat));
 	spheres.push_back(item);
 	//      }
     }
@@ -120,9 +123,9 @@ std::shared_ptr<hitable> make_world()
 
 
 int main() {
-  int nx = 400;
-  int ny = 200;
-  int rays_per_pixel = 100;
+  int nx = 200;
+  int ny = 100;
+  int rays_per_pixel = 20;
 
   float s = 1.4;
   vec3 lookfrom(12/s,2.5/s,3.5/s);
@@ -131,7 +134,8 @@ int main() {
   float aperture = 0.05;
   
   std::shared_ptr<camera> cam{new camera(lookfrom, lookat, vec3(0,1,0),30,
-					 float(nx)/float(ny), aperture, dist_to_focus)};
+					 float(nx)/float(ny), aperture, dist_to_focus,
+					 0.0, 1.0)};
   std::shared_ptr<hitable> world = random_world(11);
   scene rand_scene(world, cam);
 

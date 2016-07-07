@@ -4,9 +4,11 @@
 #include "util.h"
 
 camera::camera(vec3 lookfrom, vec3 lookat, vec3 vup,
-	       float vfov, float aspect, float aperture, float focus_dist)
+	       float vfov, float aspect, float aperture, float focus_dist,
+	       float t0, float t1)
 {
-  
+  time0 = t0;
+  time1 = t1;
   lens_radius = aperture / 2.0;
   // vfov is the angle from top to bottom, in degrees
   float theta = vfov*M_PI/180;
@@ -30,5 +32,6 @@ ray camera::get_ray(float s, float t)
   vec3 rd = lens_radius*random_in_unit_disk();
   vec3 offset = u*rd.x() + v*rd.y();
   vec3 c = origin + offset;
-  return ray(c, lower_left_corner + s*horizontal + t*vertical - c);
+  float time = time0 + rz1()*(time1 - time0);
+  return ray(c, lower_left_corner + s*horizontal + t*vertical - c, time);
 }
