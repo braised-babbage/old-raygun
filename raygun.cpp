@@ -20,6 +20,9 @@ std::shared_ptr<hitable> random_world(int n = 3) {
   std::vector<std::shared_ptr<hitable> > spheres;
   
 
+  const float t0 = 0.0f;
+  const float t1 = 1.0f;
+  
   // ground
   std::shared_ptr<texture> tex(new constant_texture(vec3(0.5, 0.5, 0.5)));
   item = std::shared_ptr<hitable>(new sphere(vec3(0,-1000,0), 1000,
@@ -39,7 +42,7 @@ std::shared_ptr<hitable> random_world(int n = 3) {
 								  rz1()*rz1())));
 	  mat = new lambertian(tex);
 	  item = std::shared_ptr<hitable>(new moving_sphere(center, center+vec3(0, 0.5*rz1(), 0),
-							    0.0, 1.0, 0.2, mat));
+							    t0, t1, 0.2, mat));
 	}
 	else if (choose_mat < 0.95) { // metal
 	  mat = new metal(vec3(0.5*(1 + rz1()),
@@ -74,7 +77,7 @@ std::shared_ptr<hitable> random_world(int n = 3) {
 					     new metal(vec3(0.7, 0.6, 0.5), 0.0)));
   spheres.push_back(item);
 
-  std::shared_ptr<bvh_node> world(new bvh_node(spheres.begin(), spheres.end(), 0.0, 0.0));
+  std::shared_ptr<bvh_node> world(new bvh_node(spheres.begin(), spheres.end(), t0, t1));
   return world;
 }
 
@@ -127,9 +130,9 @@ std::shared_ptr<hitable> random_world(int n = 3) {
 
 
 int main() {
-  int nx = 200;
-  int ny = 100;
-  int rays_per_pixel = 20;
+  int nx = 800;
+  int ny = 400;
+  int rays_per_pixel = 100;
 
   float s = 1.4;
   vec3 lookfrom(12/s,2.5/s,3.5/s);

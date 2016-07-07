@@ -32,33 +32,13 @@ bool bvh_node::hit(const ray& r, float tmin, float tmax, hit_record& rec) const 
 }
 
 
-
-bool compare_y(std::shared_ptr<hitable> a, std::shared_ptr<hitable> b)
-{
-  aabb box_left, box_right;
-  if (!a->bounding_box(0,0, box_left) || !b->bounding_box(0,0, box_right))
-    std::cerr << "no bounding box in bvh_node constructor" << std::endl;
-  
-  return box_left.min()[1] < box_right.min()[1];
-}
-
-
-bool compare_z(std::shared_ptr<hitable> a, std::shared_ptr<hitable> b)
-{
-  aabb box_left, box_right;
-  if (!a->bounding_box(0,0, box_left) || !b->bounding_box(0,0, box_right))
-    std::cerr << "no bounding box in bvh_node constructor" << std::endl;
-  
-  return box_left.min()[2] < box_right.min()[2];
-}
-
 bvh_node::bvh_node(vec_iter start, vec_iter end, float t0, float t1) {
   int axis = int(3*rz1());
 
   auto compare_fn = [&](std::shared_ptr<hitable> a,
 			std::shared_ptr<hitable> b) {
     aabb box_left, box_right;
-    if (!a->bounding_box(0,0, box_left) || !b->bounding_box(0,0, box_right))
+    if (!a->bounding_box(t0,t1, box_left) || !b->bounding_box(t0,t1, box_right))
       std::cerr << "no bounding box in bvh_node constructor" << std::endl;
     
     return box_left.min()[axis] < box_right.min()[axis];
