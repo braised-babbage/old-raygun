@@ -11,6 +11,7 @@
 #include "camera.h"
 #include "material.h"
 #include "util.h"
+#include "texture.h"
 
 
 
@@ -20,8 +21,9 @@ std::shared_ptr<hitable> random_world(int n = 3) {
   
 
   // ground
+  std::shared_ptr<texture> tex(new constant_texture(vec3(0.5, 0.5, 0.5)));
   item = std::shared_ptr<hitable>(new sphere(vec3(0,-1000,0), 1000,
-					     new lambertian(vec3(0.5, 0.5, 0.5))));
+					     new lambertian(tex)));
   spheres.push_back(item);
   
   for (int a = -n; a < n; a++) {
@@ -32,9 +34,10 @@ std::shared_ptr<hitable> random_world(int n = 3) {
       // minimal distance
       //      if ((center - vec3(4, 0.2, 0)).length() > 0.9) {
 	if (choose_mat < 0.8) { // diffuse
-	  mat = new lambertian(vec3(rz1()*rz1(),
-				    rz1()*rz1(),
-				    rz1()*rz1()));
+	  tex = std::shared_ptr<texture>(new constant_texture(vec3(rz1()*rz1(),
+								  rz1()*rz1(),
+								  rz1()*rz1())));
+	  mat = new lambertian(tex);
 	  item = std::shared_ptr<hitable>(new moving_sphere(center, center+vec3(0, 0.5*rz1(), 0),
 							    0.0, 1.0, 0.2, mat));
 	}
@@ -60,9 +63,10 @@ std::shared_ptr<hitable> random_world(int n = 3) {
 					     new dialectric(1.5)));
   spheres.push_back(item);
 
+  tex = std::shared_ptr<texture>(new constant_texture(vec3(0.4,0.2, 0.1)));
   item = std::shared_ptr<hitable>(new sphere(vec3(-4, 1, 0),
 					     1.0,
-					     new lambertian(vec3(0.4, 0.2, 0.1))));
+					     new lambertian(tex)));
   spheres.push_back(item);
 
   item = std::shared_ptr<hitable>(new sphere(vec3(4,1,0),
@@ -74,51 +78,51 @@ std::shared_ptr<hitable> random_world(int n = 3) {
   return world;
 }
 
-std::shared_ptr<hitable> camera_test_world()
-{
-  std::shared_ptr<hitable> item;
-  std::shared_ptr<hitable_list> world(new hitable_list());
+// std::shared_ptr<hitable> camera_test_world()
+// {
+//   std::shared_ptr<hitable> item;
+//   std::shared_ptr<hitable_list> world(new hitable_list());
 
-  float R = cos(M_PI/4.0);
-  item = std::shared_ptr<hitable>(new sphere(vec3(-R, 0, -1), R,
-					     new lambertian(vec3(0, 0, 1))));
-  world->add(item);
+//   float R = cos(M_PI/4.0);
+//   item = std::shared_ptr<hitable>(new sphere(vec3(-R, 0, -1), R,
+// 					     new lambertian(vec3(0, 0, 1))));
+//   world->add(item);
 
-  item = std::shared_ptr<hitable>(new sphere(vec3(R, 0, -1), R,
-					     new lambertian(vec3(1,0,0))));
-  world->add(item);
+//   item = std::shared_ptr<hitable>(new sphere(vec3(R, 0, -1), R,
+// 					     new lambertian(vec3(1,0,0))));
+//   world->add(item);
 
-  return world;
-}
+//   return world;
+// }
 
-std::shared_ptr<hitable> make_world()
-{
-  std::shared_ptr<hitable> item;
-  std::shared_ptr<hitable_list> world{new hitable_list()};
+// std::shared_ptr<hitable> make_world()
+// {
+//   std::shared_ptr<hitable> item;
+//   std::shared_ptr<hitable_list> world{new hitable_list()};
   
 
-  item = std::shared_ptr<hitable>(new sphere(vec3(0,0,-1), 0.5,
-					     new lambertian(vec3(0.1,0.2,0.5))));
-  world->add(item);
+//   item = std::shared_ptr<hitable>(new sphere(vec3(0,0,-1), 0.5,
+// 					     new lambertian(vec3(0.1,0.2,0.5))));
+//   world->add(item);
 
-  item = std::shared_ptr<hitable>(new sphere(vec3(0,-100.5,-1), 100,
-					     new lambertian(vec3(0.8,0.8,0.0))));
-  world->add(item);
+//   item = std::shared_ptr<hitable>(new sphere(vec3(0,-100.5,-1), 100,
+// 					     new lambertian(vec3(0.8,0.8,0.0))));
+//   world->add(item);
 
-  item = std::shared_ptr<hitable>(new sphere(vec3(1,0,-1), 0.5,
-					     new metal(vec3(0.8,0.6,0.2),0.3)));
-  world->add(item);
+//   item = std::shared_ptr<hitable>(new sphere(vec3(1,0,-1), 0.5,
+// 					     new metal(vec3(0.8,0.6,0.2),0.3)));
+//   world->add(item);
 
-  //bubble
-  item = std::shared_ptr<hitable>(new sphere(vec3(-1,0,-1), 0.5,
-					     new dialectric(1.5)));
-  world->add(item);
-  item = std::shared_ptr<hitable>(new sphere(vec3(-1,0,-1), -0.45,
-					     new dialectric(1.5)));
-  world->add(item);
+//   //bubble
+//   item = std::shared_ptr<hitable>(new sphere(vec3(-1,0,-1), 0.5,
+// 					     new dialectric(1.5)));
+//   world->add(item);
+//   item = std::shared_ptr<hitable>(new sphere(vec3(-1,0,-1), -0.45,
+// 					     new dialectric(1.5)));
+//   world->add(item);
   
-  return world;
-}
+//   return world;
+// }
 
 
 

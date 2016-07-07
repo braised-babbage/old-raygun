@@ -1,10 +1,11 @@
 #ifndef MATERIALH
 #define MATERIALH
 
+#include <memory>
 #include <cmath>
 #include "util.h"
 #include "hitable.h"
-
+#include "texture.h"
 
 
 class material {
@@ -15,12 +16,12 @@ public:
 
 class lambertian : public material {
 public:
-  lambertian(const vec3& albedo) : albedo(albedo) {}
+  lambertian(std::shared_ptr<texture> albedo) : albedo(albedo) {}
 
   virtual bool scatter(const ray& r, const hit_record& rec,
 		       vec3& attenuation, ray& scattered);
 private:  
-  vec3 albedo;
+  std::shared_ptr<texture> albedo;
 };
 
 

@@ -3,6 +3,7 @@
 #include "vec3.h"
 #include "util.h"
 #include "hitable.h"
+#include "texture.h"
 
 vec3 reflect(const vec3& v, const vec3& n) {
   return v - 2*dot(v,n)*n;
@@ -39,7 +40,7 @@ bool lambertian::scatter(const ray& r, const hit_record& rec,
 
   vec3 target = rec.p + rec.normal + random_in_unit_ball();
   scattered = ray(rec.p, target - rec.p);
-  attenuation = albedo;
+  attenuation = albedo->value(0,0, rec.p);
   return true;
 }
 
