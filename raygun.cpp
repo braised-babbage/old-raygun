@@ -25,8 +25,12 @@ shared_ptr<hitable> random_world(int n = 3) {
   const float t1 = 1.0f;
   
   // ground
+
+  vec3 c0(0.2,0.3,0.1);
+  vec3 c1(0.9,0.9,0.9);
   
-  tex = make_shared<constant_texture>(vec3(0.5, 0.5, 0.5));
+  tex = make_shared<checker_texture>(make_shared<constant_texture>(c0),
+				     make_shared<constant_texture>(c1));
   item = make_shared<sphere>(vec3(0,-1000,0), 1000,
 			     new lambertian(tex));
   spheres.push_back(item);
