@@ -1,6 +1,7 @@
 #ifndef HITABLEH
 #define HITABLEH
 
+#include <memory>
 #include "vec3.h"
 #include "ray.h"
 #include "aabb.h"
@@ -12,7 +13,7 @@ struct hit_record
   float t;
   vec3 p;
   vec3 normal;
-  material *mat;
+  std::shared_ptr<material> mat;
 };
 
 class hitable

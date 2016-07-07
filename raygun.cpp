@@ -20,6 +20,7 @@ shared_ptr<hitable> random_world(int n = 3) {
   shared_ptr<hitable> item;
   std::vector<shared_ptr<hitable> > spheres;
   shared_ptr<texture> tex;
+  shared_ptr<material> mat;
 
   const float t0 = 0.0f;
   const float t1 = 1.0f;
@@ -31,13 +32,12 @@ shared_ptr<hitable> random_world(int n = 3) {
   
   tex = make_shared<checker_texture>(make_shared<constant_texture>(c0),
 				     make_shared<constant_texture>(c1));
-  item = make_shared<sphere>(vec3(0,-1000,0), 1000,
-			     new lambertian(tex));
+  mat = make_shared<lambertian>(tex);
+  item = make_shared<sphere>(vec3(0,-1000,0), 1000, mat);
   spheres.push_back(item);
   
   for (int a = -n; a < n; a++) {
     for (int b = -n; b < n; b++) {
-      material* mat;
       float choose_mat = rz1();
       vec3 center(a+0.9*rz1(), 0.2, b + 0.9*rz1());
       // minimal distance
@@ -46,20 +46,20 @@ shared_ptr<hitable> random_world(int n = 3) {
 	  tex = make_shared<constant_texture>(vec3(rz1()*rz1(),
 						   rz1()*rz1(),
 						   rz1()*rz1()));
-	  mat = new lambertian(tex);
+	  mat = make_shared<lambertian>(tex);
 	  item = make_shared<moving_sphere>(center,
 					    center+vec3(0, 0.5*rz1(),0),
 					    t0, t1, 0.2, mat);
 	}
 	else if (choose_mat < 0.95) { // metal
-	  mat = new metal(vec3(0.5*(1 + rz1()),
-			       0.5*(1 + rz1()),
-			       0.5*(1 + rz1())),
-			  0.5*rz1());
+	  mat = make_shared<metal>(vec3(0.5*(1 + rz1()),
+					0.5*(1 + rz1()),
+					0.5*(1 + rz1())),
+				   0.5*rz1());
 	  item = make_shared<sphere>(center, 0.2, mat);
 	}
 	else { // glass
-	  mat = new dialectric(1.5);
+	  mat = make_shared<dialectric>(1.5);
 	  item = make_shared<sphere>(center, 0.2, mat);
 	}
 	spheres.push_back(item);
@@ -68,20 +68,23 @@ shared_ptr<hitable> random_world(int n = 3) {
   }
 
 
+  mat = make_shared<dialectric>(1.5);
   item = make_shared<sphere>(vec3(0, 1, 0),
 			     1.0,
-			     new dialectric(1.5));
+			     mat);
   spheres.push_back(item);
 
   tex = make_shared<constant_texture>(vec3(0.4,0.2, 0.1));
+  mat = make_shared<lambertian>(tex);
   item = make_shared<sphere>(vec3(-4, 1, 0),
 			     1.0,
-			     new lambertian(tex));
+			     mat);
   spheres.push_back(item);
 
+  mat = make_shared<metal>(vec3(0.7, 0.6, 0.5), 0.0);
   item = make_shared<sphere>(vec3(4,1,0),
 			     1.0,
-			     new metal(vec3(0.7, 0.6, 0.5), 0.0));
+			     mat);
   spheres.push_back(item);
 
   auto world = make_shared<bvh_node>(spheres.begin(), spheres.end(), t0, t1);
