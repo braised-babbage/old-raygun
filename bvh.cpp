@@ -19,7 +19,7 @@ bool bvh_node::bounding_box(float t0, float t1, aabb& b) const {
   return true;
 }
 
-bool bvh_node::hit(const ray& r, float tmin, float tmax, hit_record& rec) {
+bool bvh_node::hit(const ray& r, float tmin, float tmax, hit_record& rec) const {
   if (box.hit(r, tmin, tmax)) {
     hit_record left_rec, right_rec;
     bool hit_left = left->hit(r, tmin, tmax, left_rec);

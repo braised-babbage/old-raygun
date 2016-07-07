@@ -12,7 +12,7 @@ class hitable_list : public hitable
 public:
   hitable_list() {}
   // hitable_list(hitable **l, int n) {list = l; list_size = n; }
-  virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec);
+  virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const;
   virtual bool bounding_box(float t0, float t1, aabb& box) const;
   
   void add(std::shared_ptr<hitable> item)
@@ -24,7 +24,7 @@ private:
   std::vector<hit_sp> list;
 };
 
-bool hitable_list::hit(const ray& r, float t_min, float t_max, hit_record& rec) {
+bool hitable_list::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
   hit_record temp_rec;
   bool hit_anything = false;
   double closest_so_far = t_max;

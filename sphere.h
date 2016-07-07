@@ -11,7 +11,7 @@ public:
     : center(center), radius(radius), mat(mat)
   {}
 
-  virtual bool hit(const ray& ray, float t_min, float t_max, hit_record &rec);
+  virtual bool hit(const ray& ray, float t_min, float t_max, hit_record &rec) const;
 
   virtual bool bounding_box(float t0, float t1, aabb& box) const;
 
@@ -21,7 +21,7 @@ private:
   material* mat;
 };
 
-bool sphere::hit(const ray& ray, float t_min, float t_max, hit_record &rec)
+bool sphere::hit(const ray& ray, float t_min, float t_max, hit_record &rec) const
 {
   vec3 oc = ray.origin() - center;
   float a = dot(ray.direction(), ray.direction());
