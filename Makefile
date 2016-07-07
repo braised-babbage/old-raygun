@@ -16,5 +16,5 @@ material.o: material.h material.cpp
 raygun.o: aabb.h camera.h sphere.h hitable.h hitable_list.h ray.h vec3.h raygun.cpp
 	c++ -std=c++0x -c raygun.cpp -o raygun.o
 
-raygun: camera.o material.o scene.o util.o raygun.o
-	c++ -std=c++0x util.o material.o camera.o scene.o raygun.o -o raygun
+raygun: camera.o material.o scene.o util.o raygun.o bvh.o
+	c++ -std=c++0x util.o material.o camera.o scene.o bvh.o raygun.o -o raygun
