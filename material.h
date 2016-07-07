@@ -19,7 +19,7 @@ public:
 
   virtual bool scatter(const ray& r, const hit_record& rec,
 		       vec3& attenuation, ray& scattered);
-  
+private:  
   vec3 albedo;
 };
 
@@ -33,7 +33,7 @@ public:
 
   virtual bool scatter(const ray& r, const hit_record& rec,
 		       vec3& attenuation, ray& scattered);
-
+private:
   vec3 albedo;
   float fuzz;
 };
@@ -44,6 +44,7 @@ public:
 
   virtual bool scatter(const ray& r, const hit_record& rec,
 		       vec3& attenuation, ray& scattered);
+private:
   float ri;
 };
 

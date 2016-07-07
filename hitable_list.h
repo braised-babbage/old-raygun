@@ -19,6 +19,7 @@ public:
   {
     list.push_back(item);
   }
+private:
   typedef std::shared_ptr<hitable> hit_sp;
   std::vector<hit_sp> list;
 };
