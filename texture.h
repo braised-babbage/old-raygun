@@ -18,6 +18,5 @@ public:
 private:
   vec3 color;
 };
-  
 
 #endif

@@ -51,8 +51,8 @@ bvh_node::bvh_node(vec_iter start, vec_iter end, float t0, float t1) {
     right = *(end-1);
   }
   else {
-    left = std::shared_ptr<hitable>(new bvh_node(start, start + n/2, t0, t1));
-    right = std::shared_ptr<hitable>(new bvh_node(start + n/2, end, t0, t1));
+    left = std::make_shared<bvh_node>(start, start + n/2, t0, t1);
+    right = std::make_shared<bvh_node>(start + n/2, end, t0, t1);
   }
   aabb box_left, box_right;
   if (!left->bounding_box(t0, t1, box_left) || !right->bounding_box(t0,t1, box_right))

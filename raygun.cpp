@@ -13,20 +13,22 @@
 #include "util.h"
 #include "texture.h"
 
+using std::shared_ptr;
+using std::make_shared;
 
-
-std::shared_ptr<hitable> random_world(int n = 3) {
-  std::shared_ptr<hitable> item;
-  std::vector<std::shared_ptr<hitable> > spheres;
-  
+shared_ptr<hitable> random_world(int n = 3) {
+  shared_ptr<hitable> item;
+  std::vector<shared_ptr<hitable> > spheres;
+  shared_ptr<texture> tex;
 
   const float t0 = 0.0f;
   const float t1 = 1.0f;
   
   // ground
-  std::shared_ptr<texture> tex(new constant_texture(vec3(0.5, 0.5, 0.5)));
-  item = std::shared_ptr<hitable>(new sphere(vec3(0,-1000,0), 1000,
-					     new lambertian(tex)));
+  
+  tex = make_shared<constant_texture>(vec3(0.5, 0.5, 0.5));
+  item = make_shared<sphere>(vec3(0,-1000,0), 1000,
+			     new lambertian(tex));
   spheres.push_back(item);
   
   for (int a = -n; a < n; a++) {
@@ -37,23 +39,24 @@ std::shared_ptr<hitable> random_world(int n = 3) {
       // minimal distance
       //      if ((center - vec3(4, 0.2, 0)).length() > 0.9) {
 	if (choose_mat < 0.8) { // diffuse
-	  tex = std::shared_ptr<texture>(new constant_texture(vec3(rz1()*rz1(),
-								  rz1()*rz1(),
-								  rz1()*rz1())));
+	  tex = make_shared<constant_texture>(vec3(rz1()*rz1(),
+						   rz1()*rz1(),
+						   rz1()*rz1()));
 	  mat = new lambertian(tex);
-	  item = std::shared_ptr<hitable>(new moving_sphere(center, center+vec3(0, 0.5*rz1(), 0),
-							    t0, t1, 0.2, mat));
+	  item = make_shared<moving_sphere>(center,
+					    center+vec3(0, 0.5*rz1(),0),
+					    t0, t1, 0.2, mat);
 	}
 	else if (choose_mat < 0.95) { // metal
 	  mat = new metal(vec3(0.5*(1 + rz1()),
 			       0.5*(1 + rz1()),
 			       0.5*(1 + rz1())),
 			  0.5*rz1());
-	  item = std::shared_ptr<hitable>(new sphere(center, 0.2, mat));
+	  item = make_shared<sphere>(center, 0.2, mat);
 	}
 	else { // glass
 	  mat = new dialectric(1.5);
-	  item = std::shared_ptr<hitable>(new sphere(center, 0.2, mat));
+	  item = make_shared<sphere>(center, 0.2, mat);
 	}
 	spheres.push_back(item);
 	//      }
@@ -61,23 +64,23 @@ std::shared_ptr<hitable> random_world(int n = 3) {
   }
 
 
-  item = std::shared_ptr<hitable>(new sphere(vec3(0, 1, 0),
-					     1.0,
-					     new dialectric(1.5)));
+  item = make_shared<sphere>(vec3(0, 1, 0),
+			     1.0,
+			     new dialectric(1.5));
   spheres.push_back(item);
 
-  tex = std::shared_ptr<texture>(new constant_texture(vec3(0.4,0.2, 0.1)));
-  item = std::shared_ptr<hitable>(new sphere(vec3(-4, 1, 0),
-					     1.0,
-					     new lambertian(tex)));
+  tex = make_shared<constant_texture>(vec3(0.4,0.2, 0.1));
+  item = make_shared<sphere>(vec3(-4, 1, 0),
+			     1.0,
+			     new lambertian(tex));
   spheres.push_back(item);
 
-  item = std::shared_ptr<hitable>(new sphere(vec3(4,1,0),
-					     1.0,
-					     new metal(vec3(0.7, 0.6, 0.5), 0.0)));
+  item = make_shared<sphere>(vec3(4,1,0),
+			     1.0,
+			     new metal(vec3(0.7, 0.6, 0.5), 0.0));
   spheres.push_back(item);
 
-  std::shared_ptr<bvh_node> world(new bvh_node(spheres.begin(), spheres.end(), t0, t1));
+  auto world = make_shared<bvh_node>(spheres.begin(), spheres.end(), t0, t1);
   return world;
 }
 
@@ -130,8 +133,8 @@ std::shared_ptr<hitable> random_world(int n = 3) {
 
 
 int main() {
-  int nx = 800;
-  int ny = 400;
+  int nx = 400;
+  int ny = 200;
   int rays_per_pixel = 100;
 
   float s = 1.4;
@@ -140,10 +143,10 @@ int main() {
   float dist_to_focus = (lookfrom-lookat).length();
   float aperture = 0.05;
   
-  std::shared_ptr<camera> cam{new camera(lookfrom, lookat, vec3(0,1,0),30,
-					 float(nx)/float(ny), aperture, dist_to_focus,
-					 0.0, 1.0)};
-  std::shared_ptr<hitable> world = random_world(11);
+  auto cam = make_shared<camera>(lookfrom, lookat, vec3(0,1,0),30,
+				 float(nx)/float(ny), aperture, dist_to_focus,
+				 0.0, 1.0);
+  shared_ptr<hitable> world = random_world(11);
   scene rand_scene(world, cam);
 
   rand_scene.render(nx,ny,rays_per_pixel,std::cout);
