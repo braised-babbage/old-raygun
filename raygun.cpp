@@ -19,7 +19,7 @@ using std::make_shared;
 
 
 shared_ptr<hitable> two_perlin_spheres() {
-  auto pertext = make_shared<noise_texture>();
+  auto pertext = make_shared<noise_texture>(3.0);
   auto mat = make_shared<lambertian>(pertext);
   std::vector<shared_ptr<hitable> > spheres;
 

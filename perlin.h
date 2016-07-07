@@ -6,19 +6,13 @@
 #include "vec3.h"
 #include "texture.h"
 
+
+
 class perlin {
 public:
-  float noise(const vec3& p) const {
-    float u = p.x() - floor(p.x());
-    float v = p.y() - floor(p.y());
-    float w = p.z() - floor(p.z());
-    int i = int(4*p.x()) & 255;
-    int j = int(4*p.y()) & 255;
-    int k = int(4*p.z()) & 255;
-    return ranfloat[perm_x[i] ^ perm_y[j] ^ perm_z[k]];
-  }
+  float noise(const vec3& p) const;
 private:
-  static float *ranfloat;
+  static vec3 *ranvec;
   static int *perm_x;
   static int *perm_y;
   static int *perm_z;
@@ -26,12 +20,13 @@ private:
 
 class noise_texture : public texture {
 public:
-  noise_texture() {}
+  noise_texture(float sc = 1.0f) : scale(sc) { }
   virtual vec3 value(float u, float v, const vec3& p) const{
-    return vec3(1,1,1)*noise.noise(p);
+    return vec3(1,1,1)*0.5*(1 + noise.noise(scale*p));
   }
 private:
   perlin noise;
+  float scale;
 };
 
 #endif
