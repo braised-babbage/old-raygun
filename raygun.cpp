@@ -12,9 +12,25 @@
 #include "material.h"
 #include "util.h"
 #include "texture.h"
+#include "perlin.h"
 
 using std::shared_ptr;
 using std::make_shared;
+
+
+shared_ptr<hitable> two_perlin_spheres() {
+  auto pertext = make_shared<noise_texture>();
+  auto mat = make_shared<lambertian>(pertext);
+  std::vector<shared_ptr<hitable> > spheres;
+
+  spheres.push_back(make_shared<sphere>(vec3(0, -1000, 0),
+					1000,
+					mat));
+  spheres.push_back(make_shared<sphere>(vec3(0, 2, 0),
+					2,
+					mat));
+  return make_shared<bvh_node>(spheres.begin(), spheres.end(), 0.0, 1.0);
+}
 
 shared_ptr<hitable> random_world(int n = 3) {
   shared_ptr<hitable> item;
@@ -144,18 +160,28 @@ int main() {
   int ny = 200;
   int rays_per_pixel = 100;
 
-  float s = 1.4;
-  vec3 lookfrom(12/s,2.5/s,3.5/s);
-  vec3 lookat(2,0.5,0.2);
-  float dist_to_focus = (lookfrom-lookat).length();
-  float aperture = 0.05;
+  //  float s = 1.4;
+  //vec3 lookfrom(12/s,2.5/s,3.5/s);
+  //vec3 lookat(2,0.5,0.2);
+  //float dist_to_focus = (lookfrom-lookat).length();
+  //float aperture = 0.05;
   
-  auto cam = make_shared<camera>(lookfrom, lookat, vec3(0,1,0),30,
+  //auto cam = make_shared<camera>(lookfrom, lookat, vec3(0,1,0),30,
+  //			 float(nx)/float(ny), aperture, dist_to_focus,
+  //				 0.0, 1.0);
+  //shared_ptr<hitable> world = random_world(11);
+  //scene rand_scene(world, cam);
+
+  vec3 lookfrom(13,2,3);
+  vec3 lookat(0,0,0);
+  float dist_to_focus(10.0);
+  float aperture = 0.0;
+
+  auto cam = make_shared<camera>(lookfrom, lookat, vec3(0,1,0), 20,
 				 float(nx)/float(ny), aperture, dist_to_focus,
 				 0.0, 1.0);
-  shared_ptr<hitable> world = random_world(11);
-  scene rand_scene(world, cam);
-
-  rand_scene.render(nx,ny,rays_per_pixel,std::cout);
+  auto world = two_perlin_spheres();
+  scene test_scene(world, cam);
+  test_scene.render(nx,ny,rays_per_pixel,std::cout);
 }
       
