@@ -13,6 +13,7 @@
 #include "util.h"
 #include "texture.h"
 #include "perlin.h"
+#include "rect.h"
 
 using std::shared_ptr;
 using std::make_shared;
@@ -30,6 +31,22 @@ shared_ptr<hitable> two_perlin_spheres() {
 					2,
 					mat));
   return make_shared<bvh_node>(spheres.begin(), spheres.end(), 0.0, 1.0);
+}
+
+shared_ptr<hitable> simple_lit_world() {
+  auto pertext = make_shared<noise_texture>(4.0);
+  shared_ptr<material> mat = make_shared<lambertian>(pertext);
+  std::vector<shared_ptr<hitable> > objects;
+
+  objects.push_back(make_shared<sphere>(vec3(0,-1000,0), 1000, mat));
+  objects.push_back(make_shared<sphere>(vec3(0,2,0), 2, mat));
+  
+  auto light_texture = make_shared<constant_texture>(vec3(4,4,4));
+  mat = make_shared<diffuse_light>(light_texture);
+  objects.push_back(make_shared<sphere>(vec3(0,7,0), 2, mat));
+  objects.push_back(make_shared<xy_rect>(3, 5, 1, 3, -2,
+					 mat));
+  return make_shared<bvh_node>(objects.begin(), objects.end(), 0.0, 0.1);
 }
 
 shared_ptr<hitable> random_world(int n = 3) {
@@ -180,7 +197,7 @@ int main() {
   auto cam = make_shared<camera>(lookfrom, lookat, vec3(0,1,0), 20,
 				 float(nx)/float(ny), aperture, dist_to_focus,
 				 0.0, 1.0);
-  auto world = two_perlin_spheres();
+  auto world = simple_lit_world();
   scene test_scene(world, cam);
   test_scene.render(nx,ny,rays_per_pixel,std::cout);
 }
