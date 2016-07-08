@@ -11,18 +11,20 @@ vec3 scene::color(const ray& r, int depth)
   if (world->hit(r, 0.001, FLOAT_MAX, rec)) {
     ray scattered;
     vec3 attenuation;
+    vec3 emitted = rec.mat->emitted(rec.u, rec.v, rec.p);
     if (depth < 50 && rec.mat->scatter(r, rec, attenuation, scattered)) {
-      return attenuation*color(scattered, depth+1);
+      return emitted + attenuation*color(scattered, depth+1);
     }
     else {
-      return vec3(0,0,0);
+      return emitted;
     }
   }
   else {
-  // background gradient
+    // background gradient
     vec3 unit_direction = unit_vector(r.direction());
     float t = 0.5*(unit_direction.y() + 1.0);
     return linear_interpolate(vec3(1.0,1.0,1.0), vec3(0.5,0.7,1.0), t);
+    //    return vec3(0,0,0); // black background
   }
 
 }
