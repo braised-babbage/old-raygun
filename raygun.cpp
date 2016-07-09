@@ -33,6 +33,23 @@ shared_ptr<hitable> two_perlin_spheres() {
   return make_shared<bvh_node>(spheres.begin(), spheres.end(), 0.0, 1.0);
 }
 
+shared_ptr<hitable> cornell_box() {
+  auto red = make_shared<lambertian>(make_shared<constant_texture>(vec3(0.65, 0.05, 0.05)));
+  auto white = make_shared<lambertian>(make_shared<constant_texture>(vec3(0.73, 0.73, 0.73)));
+  auto green = make_shared<lambertian>(make_shared<constant_texture>(vec3(0.12, 0.45, 0.15)));
+  auto light = make_shared<diffuse_light>(make_shared<constant_texture>(vec3(15,15,15)));
+  
+  std::vector<shared_ptr<hitable> > objects;
+  objects.push_back(make_shared<flipped_normals>(make_shared<yz_rect>(0, 555, 0, 555, 555, green)));
+  objects.push_back(make_shared<yz_rect>(0, 555, 0, 555, 0, red));
+  objects.push_back(make_shared<flipped_normals>((make_shared<xz_rect>(213, 343, 227, 332, 554, light))));
+  objects.push_back(make_shared<xz_rect>(0, 555, 0, 555, 0, white));
+  objects.push_back(make_shared<flipped_normals>(make_shared<xy_rect>(0, 555, 0, 555, 555, white)));
+
+  return make_shared<bvh_node>(objects.begin(), objects.end(), 0.0, 1.0);
+}
+
+
 shared_ptr<hitable> simple_lit_world() {
   auto pertext = make_shared<noise_texture>(4.0);
   shared_ptr<material> mat = make_shared<lambertian>(pertext);
@@ -174,7 +191,8 @@ shared_ptr<hitable> random_world(int n = 3) {
 
 int main() {
   int nx = 400;
-  int ny = 200;
+  //int ny = 200;
+  int ny = 400;
   int rays_per_pixel = 100;
 
   //  float s = 1.4;
@@ -188,16 +206,24 @@ int main() {
   //				 0.0, 1.0);
   //shared_ptr<hitable> world = random_world(11);
   //scene rand_scene(world, cam);
+  /////////
+  // vec3 lookfrom(13,2,3);
+  // vec3 lookat(0,0,0);
+  // float dist_to_focus(10.0);
+  // float aperture = 0.0;
 
-  vec3 lookfrom(13,2,3);
-  vec3 lookat(0,0,0);
-  float dist_to_focus(10.0);
+  // auto cam = make_shared<camera>(lookfrom, lookat, vec3(0,1,0), 20,
+  // 				 float(nx)/float(ny), aperture, dist_to_focus,
+  // 				 0.0, 1.0);
+  // auto world = simple_lit_world();
+
+  vec3 lookfrom(278, 278, -800);
+  vec3 lookat(278, 278, 0);
+  float dist_to_focus = 10.0;
   float aperture = 0.0;
-
-  auto cam = make_shared<camera>(lookfrom, lookat, vec3(0,1,0), 20,
-				 float(nx)/float(ny), aperture, dist_to_focus,
-				 0.0, 1.0);
-  auto world = simple_lit_world();
+  float vfov = 40.0;
+  auto cam = make_shared<camera>(lookfrom, lookat, vec3(0,1,0), vfov, float(nx)/float(ny), aperture, dist_to_focus, 0.0, 1.0);
+  auto world = cornell_box();
   scene test_scene(world, cam);
   test_scene.render(nx,ny,rays_per_pixel,std::cout);
 }
