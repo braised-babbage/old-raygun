@@ -43,12 +43,13 @@ shared_ptr<hitable> cornell_box() {
   std::vector<shared_ptr<hitable> > objects;
   objects.push_back(make_shared<flipped_normals>(make_shared<yz_rect>(0, 555, 0, 555, 555, green)));
   objects.push_back(make_shared<yz_rect>(0, 555, 0, 555, 0, red));
-  objects.push_back(make_shared<flipped_normals>((make_shared<xz_rect>(213, 343, 227, 332, 554, light))));
+  objects.push_back(make_shared<xz_rect>(213, 343, 227, 332, 554, light));
+  objects.push_back(make_shared<flipped_normals>(make_shared<xz_rect>(0, 555, 0, 555, 555, white)));
   objects.push_back(make_shared<xz_rect>(0, 555, 0, 555, 0, white));
   objects.push_back(make_shared<flipped_normals>(make_shared<xy_rect>(0, 555, 0, 555, 555, white)));
 
-  objects.push_back(make_shared<box>(vec3(130,0,65), vec3(295,165,230), white));
-  objects.push_back(make_shared<box>(vec3(265,0,295), vec3(430,330,460), white));
+  //  objects.push_back(make_shared<box>(vec3(130,0,65), vec3(295,165,230), white));
+  //  objects.push_back(make_shared<box>(vec3(265,0,295), vec3(430,330,460), white));
 
   return make_shared<bvh_node>(objects.begin(), objects.end(), 0.0, 1.0);
 }
@@ -194,10 +195,10 @@ shared_ptr<hitable> random_world(int n = 3) {
 
 
 int main() {
-  int nx = 400;
+  int nx = 200;
   //int ny = 200;
-  int ny = 400;
-  int rays_per_pixel = 1000;
+  int ny = 200;
+  int rays_per_pixel = 100;
 
   //  float s = 1.4;
   //vec3 lookfrom(12/s,2.5/s,3.5/s);
