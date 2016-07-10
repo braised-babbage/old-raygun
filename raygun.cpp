@@ -179,7 +179,7 @@ int main() {
   //scene rand_scene(world, cam);
   /////////
 
-  auto box_scene = simple_lit(nx,ny);
+  auto box_scene = cornell_box(nx,ny);
   box_scene->render(nx,ny,rays_per_pixel,std::cout);
 }
       

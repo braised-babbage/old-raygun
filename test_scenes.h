@@ -1,13 +1,14 @@
-#import <memory>
-#import <vector>
-#import "vec3.h"
-#import "camera.h"
-#import "scene.h"
-#import "material.h"
-#import "texture.h"
-#import "hitable.h"
-#import "rect.h"
-#import "bvh.h"
+#include <memory>
+#include <vector>
+#include "vec3.h"
+#include "camera.h"
+#include "scene.h"
+#include "material.h"
+#include "texture.h"
+#include "hitable.h"
+#include "rect.h"
+#include "bvh.h"
+#include "transform.h"
 
 using std::shared_ptr;
 using std::make_shared;
@@ -30,8 +31,10 @@ shared_ptr<hitable> cornell_box_world() {
   objects.push_back(make_shared<xz_rect>(0, 555, 0, 555, 0, white));
   objects.push_back(make_shared<flipped_normals>(make_shared<xy_rect>(0, 555, 0, 555, 555, white)));
 
-  objects.push_back(make_shared<box>(vec3(130,0,65), vec3(295,165,230), white));
-  objects.push_back(make_shared<box>(vec3(265,0,295), vec3(430,330,460), white));
+  auto b = make_shared<box>(vec3(0,0,0), vec3(165,165,165), white);
+  objects.push_back(make_shared<translated>(make_shared<rotated_y>(b, -18), vec3(130,0,65)));
+  b =make_shared<box>(vec3(0,0,0), vec3(165,330,165), white);
+  objects.push_back(make_shared<translated>(make_shared<rotated_y>(b, 15), vec3(265,0,295)));
 
   return make_shared<bvh_node>(objects.begin(), objects.end(), 0.0, 1.0);
 }
