@@ -1,7 +1,7 @@
 #include <memory>
 #include <vector>
-#include "box.h"
-#include "rect.h"
+#include "box.hpp"
+#include "rect.hpp"
 
 
 using std::shared_ptr;

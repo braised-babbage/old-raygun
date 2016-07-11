@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include <limits>
-#include "vec3.h"
+#include "vec3.hpp"
 
 vec3 linear_interpolate(const vec3 &v1, const vec3 &v2, float t) {
   return v1*(1.0-t) + v2*t;

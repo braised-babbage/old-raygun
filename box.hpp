@@ -2,11 +2,11 @@
 #define BOXH
 
 #import <memory>
-#import "hitable.h"
-#import "ray.h"
-#import "vec3.h"
-#import "bvh.h"
-#import "aabb.h"
+#import "hitable.hpp"
+#import "ray.hpp"
+#import "vec3.hpp"
+#import "bvh.hpp"
+#import "aabb.hpp"
 
 class box : public hitable {
 public:

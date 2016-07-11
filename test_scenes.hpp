@@ -1,14 +1,14 @@
 #include <memory>
 #include <vector>
-#include "vec3.h"
-#include "camera.h"
-#include "scene.h"
-#include "material.h"
-#include "texture.h"
-#include "hitable.h"
-#include "rect.h"
-#include "bvh.h"
-#include "transform.h"
+#include "vec3.hpp"
+#include "camera.hpp"
+#include "scene.hpp"
+#include "material.hpp"
+#include "texture.hpp"
+#include "hitable.hpp"
+#include "rect.hpp"
+#include "bvh.hpp"
+#include "transform.hpp"
 
 using std::shared_ptr;
 using std::make_shared;

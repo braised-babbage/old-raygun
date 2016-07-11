@@ -1,8 +1,8 @@
 #ifndef AABBH
 #define AABBH
 
-#include "vec3.h"
-#include "ray.h"
+#include "vec3.hpp"
+#include "ray.hpp"
 
 class aabb {
 public:

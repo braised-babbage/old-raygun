@@ -2,7 +2,7 @@
 #define RECTH
 
 #include <memory>
-#include "hitable.h"
+#include "hitable.hpp"
 
 const float BB_TOL = 0.0001;
 

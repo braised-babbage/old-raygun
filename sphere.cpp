@@ -1,7 +1,7 @@
 #include <cmath>
-#include "sphere.h"
-#include "vec3.h"
-#include "ray.h"
+#include "sphere.hpp"
+#include "vec3.hpp"
+#include "ray.hpp"
 
 // spherical coordinates, normalized to [0,1]
 void get_sphere_uv(const vec3& p, float& u, float& v) {

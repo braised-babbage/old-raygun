@@ -3,9 +3,9 @@
 
 #include <memory>
 #include <cmath>
-#include "util.h"
-#include "hitable.h"
-#include "texture.h"
+#include "util.hpp"
+#include "hitable.hpp"
+#include "texture.hpp"
 
 
 class material {

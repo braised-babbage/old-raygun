@@ -1,9 +1,9 @@
-#include "ray.h"
-#include "vec3.h"
-#include "scene.h"
-#include "util.h"
-#include "camera.h"
-#include "material.h"
+#include "ray.hpp"
+#include "vec3.hpp"
+#include "scene.hpp"
+#include "util.hpp"
+#include "camera.hpp"
+#include "material.hpp"
 
 vec3 scene::color(const ray& r, int depth)
 {  

@@ -1,9 +1,9 @@
 #ifndef SPHEREH
 #define SPHEREH
-#include "vec3.h"
-#include "hitable.h"
-#include "material.h"
-#include "aabb.h"
+#include "vec3.hpp"
+#include "hitable.hpp"
+#include "material.hpp"
+#include "aabb.hpp"
 
 class sphere : public hitable {
 public:

@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <memory>
-#include "vec3.h"
-#include "hitable.h"
+#include "vec3.hpp"
+#include "hitable.hpp"
 
 
 class hitable_list : public hitable

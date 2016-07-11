@@ -1,5 +1,5 @@
-#include "perlin.h"
-#include "util.h"
+#include "perlin.hpp"
+#include "util.hpp"
 
 // TODO: move to util.h 
 inline float trilinear_interp(float c[2][2][2], float u, float v, float w) {

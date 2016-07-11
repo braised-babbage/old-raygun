@@ -1,7 +1,7 @@
 #include <cmath>
 #include <cfloat>
-#include "transform.h"
-#include "ray.h"
+#include "transform.hpp"
+#include "ray.hpp"
 
 bool translated::hit(const ray& r, float tmin, float tmax, hit_record& rec) const {
   ray translated_ray(r.origin() - displacement, r.direction(), r.time());

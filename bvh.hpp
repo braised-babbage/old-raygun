@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "hitable.h"
-#include "aabb.h"
+#include "hitable.hpp"
+#include "aabb.hpp"
 
 class bvh_node : public hitable {
 public:

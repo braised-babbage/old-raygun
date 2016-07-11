@@ -1,7 +1,7 @@
-#include "camera.h"
-#include "vec3.h"
-#include "ray.h"
-#include "util.h"
+#include "camera.hpp"
+#include "vec3.hpp"
+#include "ray.hpp"
+#include "util.hpp"
 
 camera::camera(vec3 lookfrom, vec3 lookat, vec3 vup,
 	       float vfov, float aspect, float aperture, float focus_dist,

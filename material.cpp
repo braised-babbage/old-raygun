@@ -1,9 +1,9 @@
 #include <cmath>
-#include "material.h"
-#include "vec3.h"
-#include "util.h"
-#include "hitable.h"
-#include "texture.h"
+#include "material.hpp"
+#include "vec3.hpp"
+#include "util.hpp"
+#include "hitable.hpp"
+#include "texture.hpp"
 
 vec3 reflect(const vec3& v, const vec3& n) {
   return v - 2*dot(v,n)*n;

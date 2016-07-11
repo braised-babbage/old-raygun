@@ -1,9 +1,9 @@
 #ifndef CAMERAH
 #define CAMERAH
 
-#include "vec3.h"
-#include "ray.h"
-#include "util.h"
+#include "vec3.hpp"
+#include "ray.hpp"
+#include "util.hpp"
 
 class camera
 {

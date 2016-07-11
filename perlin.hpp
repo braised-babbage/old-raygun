@@ -2,9 +2,9 @@
 #define PERLINH
 
 #include <cmath>
-#include "util.h"
-#include "vec3.h"
-#include "texture.h"
+#include "util.hpp"
+#include "vec3.hpp"
+#include "texture.hpp"
 
 
 

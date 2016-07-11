@@ -3,10 +3,10 @@
 
 #include <iostream>
 #include <memory>
-#include "hitable.h"
-#include "ray.h"
-#include "vec3.h"
-#include "camera.h"
+#include "hitable.hpp"
+#include "ray.hpp"
+#include "vec3.hpp"
+#include "camera.hpp"
 
 // A scene consists of a world and a camera.
 // It may be rendered to an output stream.

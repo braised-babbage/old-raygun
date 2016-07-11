@@ -3,7 +3,7 @@
 
 #include <cstdlib>
 #include <limits>
-#include "vec3.h"
+#include "vec3.hpp"
 
 const float FLOAT_MAX = std::numeric_limits<float>::max();
 

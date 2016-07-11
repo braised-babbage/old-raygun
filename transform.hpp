@@ -1,8 +1,8 @@
 #ifndef TRANSFORMH
 #define TRANSFORMH
 
-#include "hitable.h"
-#include "vec3.h"
+#include "hitable.hpp"
+#include "vec3.hpp"
 
 class translated : public hitable {
 public:

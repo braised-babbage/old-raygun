@@ -2,9 +2,9 @@
 #define HITABLEH
 
 #include <memory>
-#include "vec3.h"
-#include "ray.h"
-#include "aabb.h"
+#include "vec3.hpp"
+#include "ray.hpp"
+#include "aabb.hpp"
 
 class material;
 

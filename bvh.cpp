@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <iterator>
-#include "bvh.h"
-#include "util.h"
+#include "bvh.hpp"
+#include "util.hpp"
 
 
 bool bvh_node::bounding_box(float t0, float t1, aabb& b) const {
