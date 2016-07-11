@@ -32,7 +32,7 @@ shared_ptr<hitable> two_perlin_spheres() {
   spheres.push_back(make_shared<sphere>(vec3(0, 2, 0),
 					2,
 					mat));
-  return make_shared<bvh_node>(spheres.begin(), spheres.end(), 0.0, 1.0);
+  return make_shared<bvh_node>(spheres, 0.0, 1.0);
 }
 
 
@@ -108,7 +108,7 @@ shared_ptr<hitable> random_world(int n = 3) {
 			     mat);
   spheres.push_back(item);
 
-  auto world = make_shared<bvh_node>(spheres.begin(), spheres.end(), t0, t1);
+  auto world = make_shared<bvh_node>(spheres, t0, t1);
   return world;
 }
 

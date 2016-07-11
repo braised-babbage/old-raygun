@@ -10,6 +10,7 @@ class bvh_node : public hitable {
 public:
   typedef std::vector<std::shared_ptr<hitable> >::iterator vec_iter;
   bvh_node(vec_iter start, vec_iter end, float t0, float t1);
+  bvh_node(std::vector<std::shared_ptr<hitable> > &hitables, float t0, float t1) : bvh_node(hitables.begin(), hitables.end(), t0, t1) {}
   
   virtual bool hit(const ray& r, float tmin, float tmax, hit_record& rec) const;
   virtual bool bounding_box(float t0, float t1, aabb& box) const;

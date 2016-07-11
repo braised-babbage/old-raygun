@@ -21,7 +21,7 @@ box::box(const vec3& p0, const vec3& p1, shared_ptr<material> mat) {
 					 p1.x(), mat));
   objects.push_back(make_shared<flipped_normals>(make_shared<yz_rect>(p0.y(), p1.y(), p0.z(), p1.z(), p0.x(), mat)));
   
-  walls = make_shared<bvh_node>(objects.begin(), objects.end(), 0.0, 1.0);
+  walls = make_shared<bvh_node>(objects, 0.0, 1.0);
 }
 
 bool box::hit(const ray& r, float t0, float t1, hit_record& rec) const {

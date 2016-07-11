@@ -36,7 +36,7 @@ shared_ptr<hitable> cornell_box_world() {
   b =make_shared<box>(vec3(0,0,0), vec3(165,330,165), white);
   objects.push_back(make_shared<translated>(make_shared<rotated_y>(b, 15), vec3(265,0,295)));
 
-  return make_shared<bvh_node>(objects.begin(), objects.end(), 0.0, 1.0);
+  return make_shared<bvh_node>(objects, 0.0, 1.0);
 }
 
 
@@ -68,7 +68,7 @@ shared_ptr<hitable> simple_lit_world() {
   objects.push_back(make_shared<sphere>(vec3(0,7,0), 2, mat));
   objects.push_back(make_shared<xy_rect>(3, 5, 1, 3, -2,
 					 mat));
-  return make_shared<bvh_node>(objects.begin(), objects.end(), 0.0, 0.1);
+  return make_shared<bvh_node>(objects, 0.0, 0.1);
 }
 
 shared_ptr<scene> simple_lit(int nx, int ny) {
